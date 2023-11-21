@@ -30,7 +30,6 @@ const queueStyle = `
 }
 
 .gizmo.dark {
-  /*--queue-primary: #45b2ee;*/
   --queue-primary: #63b9e3;
 }
 
@@ -38,8 +37,6 @@ const queueStyle = `
   position: fixed;
   top: 8px;
   right: 8px;
-  /*background: #eee;*/
-  /*color: #222;*/
   background: var(--surface-primary);
   color: var(--text-primary);
   padding: 12px;
@@ -72,7 +69,6 @@ const queueStyle = `
 
 .queue-start-button {
   background: var(--queue-primary);
-  /*color: #eee;*/
   color: var(--surface-primary);
   font-weight: bold;
   padding: 4px;
@@ -107,15 +103,11 @@ const queueItemStyle = `
 }
 
 .queue-item-delete {
-  /*background: var(--queue-primary);*/
   font-size: 14px;
-  /*color: white;*/
-  /*color: var(--surface-primary);*/
   color: var(--queue-primary);
   font-weight: bold;
   min-width: 20px;
   width: 20px;
-  /*height: 20px;*/
   border-radius: 4px;
   display: flex;
   justify-content: center;
@@ -165,17 +157,6 @@ function queueInit() {
   addStyle('[data-queue-style]', queueStyle);
   addStyle('[data-queue-item-style]', queueItemStyle);
   addQueue();
-}
-
-function synteticTriggerChatGPT() {
-  getTextareaInput().value = 'Simple answer a single number 0';
-  const event = new Event('input', {
-    bubbles: true,
-    cancelable: true,
-  });
-
-  getTextareaInput().dispatchEvent(event);
-  getSendButton()?.click();
 }
 
 function sendFirstQueueMessage() {
