@@ -21,7 +21,7 @@ const queueTemplate = `
     </button>
   </div>
 </template>
-`
+`;
 
 const queueStyle = `
 <style>
@@ -79,7 +79,7 @@ const queueStyle = `
   justify-content: center;
 }
 </style>
-`
+`;
 
 const queueItemTemplate = `
 <template data-queue-item-template>
@@ -90,7 +90,7 @@ const queueItemTemplate = `
     <li data-queue-item data-index="-1"></li>
   </div>
 </template>
-`
+`;
 
 const queueItemStyle = `
 <style>
@@ -113,7 +113,7 @@ const queueItemStyle = `
   justify-content: center;
 }
 </style>
-`
+`;
 
 /**
  * @returns {HTMLButtonElement | null}
@@ -135,7 +135,7 @@ function addTemplate(selector, templateString) {
     div.innerHTML = templateString;
 
     document.body.appendChild(div);
-    console.log('added template ' + selector)
+    console.log('added template ' + selector);
   }
 }
 
@@ -146,7 +146,7 @@ function addStyle(selector, templateString) {
     div.innerHTML = templateString;
 
     document.body.appendChild(div);
-    console.log('added style ' + selector)
+    console.log('added style ' + selector);
   }
 }
 
@@ -239,7 +239,7 @@ function addQueue() {
 
 function updateQueueList() {
   const elements = queueItems.map(createQueueItem);
-  console.log(queueItems, elements)
+  console.log(queueItems, elements);
   queueList.innerHTML = '';
   queueList.append(...elements);
 }
@@ -273,4 +273,3 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
 } else {
   document.addEventListener('DOMContentLoaded', queueInit);
 }
-
