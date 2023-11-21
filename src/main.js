@@ -4,15 +4,23 @@
 
 console.log('Hello, ChatGPT!');
 
-const queueItems = ['Hi ChatGPT! Which last date you know information?', 'Simply answer 1', 'Simply answer 2', 'Simply answer 3'];
+const queueItems = [
+  'Hi ChatGPT! What is the most recent date of the information you have access to?',
+  'Simply answer 1',
+  'Simply answer 2',
+  'Simply answer 3',
+];
 let queueList = null;
 let queueStartButton = null;
 
 const queueTemplate = `
 <template data-queue-template>
   <div class="queue" data-queue>
-    <h3>Queue manager</h3>
-    <p>Message to be added:</p>
+    <h3 class="queue-header">
+      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12zm-7-1h2v-4h4V9h-4V5h-2v4H9v2h4z"/></svg>
+      Queue manager
+    </h3>
+    <p class="queue-description">Add and organize your responses to send them in a sequential manner</p>
     <ul class="queue-list" data-queue-list></ul>
     <textarea class="queue-input" placeholder="Add message here" rows="4" data-queue-input></textarea>
     <button class="queue-start-button" data-queue-start-button>
@@ -46,6 +54,7 @@ const queueStyle = `
   gap: 12px;
   flex-direction: column;
   border: 1px solid var(--surface-tertiary);
+  font-size: 14px;
 }
 
 .queue-input {
@@ -54,6 +63,16 @@ const queueStyle = `
   border: 1px solid var(--surface-tertiary);
   transition: all 0.1s;
   resize: none;
+}
+
+.queue-header {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.queue-description {
+  font-weight: bold;
 }
 
 .queue-list {
@@ -77,6 +96,7 @@ const queueStyle = `
   display: flex;
   gap: 8px;
   justify-content: center;
+  font-size: 16px;
 }
 </style>
 `;
@@ -85,7 +105,7 @@ const queueItemTemplate = `
 <template data-queue-item-template>
   <div class="queue-item-wrapper" data-queue-wrapper>
     <button class="queue-item-delete" data-delete-queue-item>
-      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="20px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg>
     </button>
     <li data-queue-item data-index="-1"></li>
   </div>
@@ -108,6 +128,7 @@ const queueItemStyle = `
   font-weight: bold;
   min-width: 20px;
   width: 20px;
+  height: 20px;
   border-radius: 4px;
   display: flex;
   justify-content: center;
