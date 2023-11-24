@@ -46,8 +46,11 @@ const queueTemplate = `
       <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12zm-7-1h2v-4h4V9h-4V5h-2v4H9v2h4z"/></svg>
       Queue manager
     </h3>
+    <button data-queue-close class="queue-close-button" title="Close queue">
+      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+    </button>
     <p class="queue-description">Add and organize your responses to send them in a sequential manner</p>
-    <p data-queue-total class="queue-description">Empty queue (0/0)</p>
+    <p data-queue-total class="queue-description"></p>
     <ul class="queue-list" data-queue-list></ul>
     <textarea class="queue-input" placeholder="Add message here" rows="4" data-queue-input></textarea>
     <button class="queue-start-button" data-queue-start-button>
@@ -86,6 +89,12 @@ const queueStyle = `
   flex-direction: column;
   border: 1px solid var(--surface-tertiary);
   font-size: 14px;
+}
+
+.queue-close-button {
+  position: absolute;
+  top: 14px;
+  right: 14px;
 }
 
 .queue-input {
@@ -301,9 +310,15 @@ function addQueue() {
   const queueTemplate = document.querySelector('[data-queue-template]').content.cloneNode(true);
   const queue = queueTemplate.querySelector('[data-queue]');
   const queueInput = queueTemplate.querySelector('[data-queue-input]');
+  const queueClose = queueTemplate.querySelector('[data-queue-close]');
   queueStartButton = queueTemplate.querySelector('[data-queue-start-button]');
   queueList = queueTemplate.querySelector('[data-queue-list]');
   queueTotal = queueTemplate.querySelector('[data-queue-total]');
+
+  queueClose.addEventListener('click', () => {
+    queueShow.classList.remove('hide');
+    queue.classList.add('hide');
+  });
 
   queueInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && event.target.value) {
