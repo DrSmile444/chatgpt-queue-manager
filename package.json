@@ -6,10 +6,12 @@
   "scripts": {
     "start": "npx http-server ./ -o ./static",
     "symlink:macos": "bash ./symlink-macos.sh",
+    "reformat": "npx prettier --write ./static/**/*.html && npx prettier --write ./src/**/*.js && npx prettier --write ./static/**/*.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "http-server": "^14.1.1"
+    "http-server": "^14.1.1",
+    "prettier": "^3.1.0"
   },
   "repository": {
     "type": "git",
