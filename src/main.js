@@ -13,7 +13,31 @@ const queueItems = [
 let queueList = null;
 let queueStartButton = null;
 let queueTotal = null;
+let queueShow = null;
 let queueStartNumber = 0;
+
+const queueShowTemplate = `
+<template data-queue-show-template>
+  <button data-queue-show-button class="queue-show" title="Show queue manager">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12zm-7-1h2v-4h4V9h-4V5h-2v4H9v2h4z"/></svg>
+  </button>
+</template>
+`;
+
+const queueShowStyle = `
+<style>
+.queue-show {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  padding: 8px;
+  border-radius: 8px;
+  color: var(--text-primary);
+  background: var(--surface-primary);
+  border: 1px solid var(--surface-tertiary);
+}
+</style>
+`;
 
 const queueTemplate = `
 <template data-queue-template>
@@ -36,6 +60,10 @@ const queueTemplate = `
 
 const queueStyle = `
 <style>
+.hide {
+  display: none !important;
+}
+
 .gizmo {
   --queue-primary: #0e1f60;
 }
@@ -198,9 +226,11 @@ function queueInit() {
   addTemplate('[data-queue-template]', queueTemplate);
   addTemplate('[data-queue-item-template]', queueItemTemplate);
   addTemplate('[data-queue-empty-template]', queueEmptyTemplate);
+  addTemplate('[data-queue-show-template]', queueShowTemplate);
   addStyle('[data-queue-style]', queueStyle);
   addStyle('[data-queue-item-style]', queueItemStyle);
   addStyle('[data-queue-empty-style]', queueEmptyStyle);
+  addStyle('[data-queue-show-style]', queueShowStyle);
   addQueue();
 }
 
@@ -254,13 +284,26 @@ function trySendAllQueue() {
 
 function addQueue() {
   /**
+   * @type {HTMLButtonElement}
+   * */
+  const queueShowTemplate = document.querySelector('[data-queue-show-template]').content.cloneNode(true);
+  queueShow = queueShowTemplate.querySelector('[data-queue-show-button]');
+  document.body.appendChild(queueShowTemplate);
+
+  queueShow.addEventListener('click', () => {
+    queueShow.classList.add('hide');
+    queue.classList.remove('hide');
+  });
+
+  /**
    * @type {HTMLDivElement}
    * */
-  const queue = document.querySelector('[data-queue-template]').content.cloneNode(true);
-  const queueInput = queue.querySelector('[data-queue-input]');
-  queueStartButton = queue.querySelector('[data-queue-start-button]');
-  queueList = queue.querySelector('[data-queue-list]');
-  queueTotal = queue.querySelector('[data-queue-total]');
+  const queueTemplate = document.querySelector('[data-queue-template]').content.cloneNode(true);
+  const queue = queueTemplate.querySelector('[data-queue]');
+  const queueInput = queueTemplate.querySelector('[data-queue-input]');
+  queueStartButton = queueTemplate.querySelector('[data-queue-start-button]');
+  queueList = queueTemplate.querySelector('[data-queue-list]');
+  queueTotal = queueTemplate.querySelector('[data-queue-total]');
 
   queueInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && event.target.value) {
@@ -279,10 +322,16 @@ function addQueue() {
     queueStartButton.innerText = 'Pending...';
   });
 
-  document.body.appendChild(queue);
+  document.body.appendChild(queueTemplate);
   queueStartNumber = queueItems.length;
   updateQueueList();
   console.log('added queue');
+
+  if (queueItems.length) {
+    queueShow.classList.add('hide');
+  } else {
+    queue.classList.add('hide');
+  }
 }
 
 function updateQueueList() {
