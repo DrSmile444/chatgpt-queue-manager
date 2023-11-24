@@ -4,7 +4,7 @@
   "description": "Overview The ChatGPT Message Queue Manager is a specialized tool designed to augment the capabilities of ChatGPT, particularly in managing queued messages. This web-based utility enables users to queue up responses and manage the flow of messages, enhancing the interaction with ChatGPT. Implemented using pure JavaScript, HTML, and CSS, it aims to provide a seamless and efficient user experience.",
   "main": "index.js",
   "scripts": {
-    "start": "npx http-server ./src/ -o",
+    "start": "npx http-server ./ -o ./static",
     "symlink:macos": "bash ./symlink-macos.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
