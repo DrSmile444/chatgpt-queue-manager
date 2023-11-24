@@ -12,6 +12,8 @@ const queueItems = [
 ];
 let queueList = null;
 let queueStartButton = null;
+let queueTotal = null;
+let queueStartNumber = 0;
 
 const queueTemplate = `
 <template data-queue-template>
@@ -21,6 +23,7 @@ const queueTemplate = `
       Queue manager
     </h3>
     <p class="queue-description">Add and organize your responses to send them in a sequential manner</p>
+    <p data-queue-total class="queue-description">Empty queue (0/0)</p>
     <ul class="queue-list" data-queue-list></ul>
     <textarea class="queue-input" placeholder="Add message here" rows="4" data-queue-input></textarea>
     <button class="queue-start-button" data-queue-start-button>
@@ -200,7 +203,7 @@ function sendFirstQueueMessage() {
     getSendButton()?.click();
   }, 1000);
 
-  removeQueueItem(0);
+  removeQueueItem();
 }
 
 function trySendAllQueue() {
@@ -236,9 +239,11 @@ function addQueue() {
   const queueInput = queue.querySelector('[data-queue-input]');
   queueStartButton = queue.querySelector('[data-queue-start-button]');
   queueList = queue.querySelector('[data-queue-list]');
+  queueTotal = queue.querySelector('[data-queue-total]');
 
   queueInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && event.target.value) {
+      queueStartNumber += 1;
       queueItems.push(event.target.value.trim());
       updateQueueList();
 
@@ -254,6 +259,7 @@ function addQueue() {
   });
 
   document.body.appendChild(queue);
+  queueStartNumber = queueItems.length;
   updateQueueList();
   console.log('added queue');
 }
@@ -263,11 +269,24 @@ function updateQueueList() {
   console.log(queueItems, elements);
   queueList.innerHTML = '';
   queueList.append(...elements);
+
+  if (queueItems.length === 0) {
+    queueStartNumber = 0;
+    queueTotal.innerText = 'Empty queue (0/0)';
+  } else {
+    queueTotal.innerText = `Messages queue (${elements.length}/${queueStartNumber})`;
+  }
 }
 
 function removeQueueItem(index) {
+  if (index || index === 0) {
+    queueStartNumber -= 1;
+  }
+
+  const normalizedIndex = index || 0;
+
   console.log('removeQueueItem', index);
-  queueItems.splice(index, 1);
+  queueItems.splice(normalizedIndex, 1);
   updateQueueList();
   console.log('new queueItems', queueItems);
 }
