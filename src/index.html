@@ -1,18 +1,38 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" class="gizmo">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>ChatGPT Queue Manager Debug</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>ChatGPT Queue Manager Debug</title>
 
-  <link rel="preload" href="https://cdn.oaistatic.com/_next/static/css/53c17921e0c481ce.css" as="style">
-  <link rel="stylesheet" href="https://cdn.oaistatic.com/_next/static/css/53c17921e0c481ce.css" data-n-g="">
-</head>
-<body>
-  <textarea id="prompt-textarea" placeholder="Message ChatGPT..."></textarea>
-  <button data-testid="send-button" disabled>Send</button>
-  <script src="./main.js"></script>
-</body>
+    <link rel="preload" href="https://cdn.oaistatic.com/_next/static/css/53c17921e0c481ce.css" as="style" />
+    <link rel="stylesheet" href="https://cdn.oaistatic.com/_next/static/css/53c17921e0c481ce.css" data-n-g="" />
+
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <label>
+      <span>Dark Theme</span>
+      <label class="switch">
+        <input type="checkbox" onclick="changeTheme(this.checked);" />
+        <span class="slider round"></span>
+      </label>
+    </label>
+
+    <textarea id="prompt-textarea" placeholder="Message ChatGPT..."></textarea>
+    <button data-testid="send-button" disabled>Send</button>
+
+    <script>
+      function changeTheme(checked) {
+        if (checked) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      }
+    </script>
+
+    <script src="./main.js"></script>
+  </body>
 </html>
