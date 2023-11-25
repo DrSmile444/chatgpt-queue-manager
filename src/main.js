@@ -18,8 +18,8 @@ let queueStartNumber = 0;
 
 const queueShowTemplate = `
 <template data-queue-show-template>
-  <button data-queue-show-button class="queue-show" title="Show queue manager">
-    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12zm-7-1h2v-4h4V9h-4V5h-2v4H9v2h4z"/></svg>
+  <button data-queue-show-button class="queue-show btn-neutral" title="Show queue manager">
+    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="20px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12zm-7-1h2v-4h4V9h-4V5h-2v4H9v2h4z"/></svg>
   </button>
 </template>
 `;
@@ -28,13 +28,10 @@ const queueShowStyle = `
 <style>
 .queue-show {
   position: fixed;
-  top: 8px;
-  right: 8px;
-  padding: 8px;
+  top: 10px;
+  right: 68px;
+  padding: 7px;
   border-radius: 8px;
-  color: var(--text-primary);
-  background: var(--surface-primary);
-  border: 1px solid var(--surface-tertiary);
 }
 </style>
 `;
