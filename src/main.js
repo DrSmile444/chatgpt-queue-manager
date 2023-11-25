@@ -29,9 +29,14 @@ const queueShowStyle = `
 .queue-show {
   position: fixed;
   top: 10px;
-  right: 68px;
+  right: 8px;
   padding: 7px;
   border-radius: 8px;
+}
+
+/* Selector for share button */
+.btn.relative.h-9.w-9 {
+  margin-right: 34px;
 }
 </style>
 `;
