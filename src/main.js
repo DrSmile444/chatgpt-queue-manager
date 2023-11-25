@@ -61,7 +61,7 @@ const queueTemplate = `
           <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><g><rect fill="none" height="24" width="24"/></g><g><path d="M18,15v3H6v-3H4v3c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2v-3H18z M7,9l1.41,1.41L11,7.83V16h2V7.83l2.59,2.58L17,9l-5-5L7,9z"/></g></svg>
         </button>
         <button class="queue-button" data-download-button title="Download queue">
-          <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><g><rect fill="none" height="24" width="24"/></g><g><path d="M18,15v3H6v-3H4v3c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2v-3H18z M17,11l-1.41-1.41L13,12.17V4h-2v8.17L8.41,9.59L7,11l5,5 L17,11z"/></g></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 2h-4.18C14.4.84 13.3 0 12 0S9.6.84 9.18 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm7 18H5V4h2v3h10V4h2v16z"/></svg>
         </button>
       </div>
       <div class="queue-buttons-right">
@@ -155,6 +155,7 @@ const queueStyle = `
   display: flex;
   gap: 8px;
   justify-content: center;
+  align-items: center;
   font-size: 16px;
   border: 1px solid var(--queue-primary);
 }
@@ -384,7 +385,9 @@ function addQueue() {
   });
 
   queueDownloadButton.addEventListener('click', () => {
-    downloadFile(queueItems, 'queue-manager-' + Date.now());
+    copyToClipboard(queueItems);
+    // Unfortunately, it doesn't work in ChatGPT application due to application itself
+    // downloadFile(queueItems, 'queue-manager-' + Date.now());
   });
 
   queueClearButton.addEventListener('click', () => {
@@ -469,6 +472,19 @@ function createQueueItem(text, index) {
   return queueItemTemplate;
 }
 
+function copyToClipboard(object) {
+  navigator.clipboard.writeText(JSON.stringify(object)).then(
+    function () {
+      console.log('Copying to clipboard was successful!');
+      alert('Queue has been copied to clipboard!\nSave it in a new `.json` file and you can upload it again.');
+    },
+    function (err) {
+      console.error('Could not copy text: ', err);
+      alert('Failed to copy data to clipboard.');
+    },
+  );
+}
+
 function downloadFile(object, name = 'data') {
   const blob = new Blob([JSON.stringify(object)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -489,13 +505,13 @@ function parseJsonFile(file) {
   return new Promise((resolve, reject) => {
     // Check if file is provided
     if (!file) {
-      reject("No file provided.");
+      reject('No file provided.');
       return;
     }
 
     // Check if file type is JSON
-    if (!file.type === "application/json") {
-      reject("File is not a JSON.");
+    if (!file.type === 'application/json') {
+      reject('File is not a JSON.');
       return;
     }
 
@@ -522,7 +538,6 @@ function parseJsonFile(file) {
     reader.readAsText(file);
   });
 }
-
 
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
   queueInit();
