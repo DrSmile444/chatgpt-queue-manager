@@ -4,7 +4,9 @@
 
 console.log('Hello, ChatGPT!');
 
-const queueItems = [
+const QUEUE_STATE_KEY = 'queueState';
+
+const queueItems = JSON.parse(localStorage.getItem(QUEUE_STATE_KEY) || 'null') || [
   'Hi ChatGPT! What is the most recent date of the information you have access to?',
   'Simply answer 1',
   'Simply answer 2',
@@ -356,6 +358,8 @@ function updateQueueList() {
   console.log(queueItems, elements);
   queueList.innerHTML = '';
   queueList.append(...elements);
+
+  localStorage.setItem(QUEUE_STATE_KEY, JSON.stringify(queueItems));
 
   if (queueItems.length === 0) {
     queueStartNumber = 0;
