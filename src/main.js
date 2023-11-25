@@ -17,6 +17,8 @@ let queueStartButton = null;
 let queueTotal = null;
 let queueShow = null;
 let queueStartNumber = 0;
+let globalSendInterval = null;
+let isSendActive = false;
 
 const queueShowTemplate = `
 <template data-queue-show-template>
@@ -53,7 +55,10 @@ const queueTemplate = `
     <button data-queue-close class="queue-close-button" title="Close queue">
       <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
     </button>
-    <p class="queue-description">Add and organize your responses to send them in a sequential manner</p>
+    <p class="queue-description">
+      <span data-description-inactive>Add and organize your responses to send them in a sequential manner</span>
+      <span data-description-active class="hide">Messages are currently being sent. Press the 'Stop' button to halt the sending process.</span>
+    </p>
     <input type="file" accept="application/json" data-upload-input style="display: none;" />
     <div class="queue-buttons">
       <div class="queue-buttons-left">
@@ -164,6 +169,10 @@ const queueStyle = `
   background: var(--queue-primary);
   color: var(--surface-primary); 
   border: none;
+}
+
+.queue-button-warn {
+  background: #bb1b1b;
 }
 
 .queue-button-icon {
@@ -310,10 +319,15 @@ function sendFirstQueueMessage() {
 }
 
 function trySendAllQueue() {
-  console.log('trySendAllQueue', queueItems);
+  console.log('trySendAllQueue', { queueItems, isSendActive });
+  if (!isSendActive) {
+    return;
+  }
+
   if (queueItems.length) {
     console.log('create getSendButton() interval', queueItems);
-    const interval = setInterval(() => {
+    globalSendInterval = setInterval(() => {
+      console.log('globalSendInterval', globalSendInterval)
       if (getSendButton()?.disabled === true) {
         console.log('clear getSendButton() interval', queueItems);
         setTimeout(() => {
@@ -323,13 +337,16 @@ function trySendAllQueue() {
             trySendAllQueue();
           }, 1000);
         }, 1000);
-        clearInterval(interval);
+        clearInterval(globalSendInterval);
       }
     }, 1000);
   } else {
+    isSendActive = false;
     queueStartButton.innerText = 'Finished!';
+    queueStartButton.classList.remove('queue-button-warn');
     setTimeout(() => {
-      queueStartButton.innerText = 'Start';
+      queueStartButton.innerText = 'Start again';
+      queueStartButton.classList.remove('queue-button-warn');
     }, 3000);
   }
 }
@@ -361,6 +378,9 @@ function addQueue() {
   const queueUploadButton = queueTemplate.querySelector('[data-upload-button]');
   const queueDownloadButton = queueTemplate.querySelector('[data-download-button]');
   const queueClearButton = queueTemplate.querySelector('[data-clear-button]');
+
+  const queueDescriptionInactive = queueTemplate.querySelector('[data-description-inactive]');
+  const queueDescriptionActive = queueTemplate.querySelector('[data-description-active]');
 
   queueStartButton = queueTemplate.querySelector('[data-queue-start-button]');
   queueList = queueTemplate.querySelector('[data-queue-list]');
@@ -419,8 +439,22 @@ function addQueue() {
   });
 
   queueStartButton.addEventListener('click', () => {
+    if (isSendActive) {
+      queueDescriptionInactive.classList.remove('hide');
+      queueDescriptionActive.classList.add('hide');
+      queueStartButton.classList.remove('queue-button-warn');
+      isSendActive = false;
+      clearInterval(globalSendInterval);
+      queueStartButton.innerText = 'Start again';
+      return;
+    }
+
+    queueDescriptionInactive.classList.add('hide');
+    queueDescriptionActive.classList.remove('hide');
+    isSendActive = true;
     trySendAllQueue();
-    queueStartButton.innerText = 'Pending...';
+    queueStartButton.innerText = 'Stop';
+    queueStartButton.classList.add('queue-button-warn');
   });
 
   document.body.appendChild(queueTemplate);
